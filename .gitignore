@@ -1,19 +1,28 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
+*.py[co]
 
 # C extensions
-*.so
+#*.so
+
+# Pycharm
+.idea/
+
+# SQLite DB
+*.db
 
 # Distribution / packaging
 .Python
+Scripts/
+include/
+local/
+bin/
 env/
 build/
 develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
 lib/
 lib64/
 parts/
@@ -37,11 +46,9 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .coverage
-.coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*,cover
 
 # Translations
 *.mo
