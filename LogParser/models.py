@@ -12,13 +12,14 @@ class DUT(SQLBase):
     __tablename__ = "dut"
 
     id = Column(Integer, primary_key=True)
-    serialnumber = Column(String(20), nullable=False)
-    testresult = Column(String(20))
-    bincode = Column(String(20))
-    testdate = Column(String(20))
+    sn = Column(String(20), nullable=False)
+    test_result = Column(String(20))
+    bin_codes = Column(String(20))
+    date = Column(String(20))
+    time = Column(String(20))
     snr = Column(String(20))
 
     def to_dict(self):
-        return {"serial_number": self.serialnumber,
+        return {"serial_number": self.sn,
                 "bin_code": self.bincode,
                 "test_result": self.testresult}
