@@ -76,6 +76,13 @@ def main():
             for k, v in dut_dict.items():
                 setattr(dut, k, v)
             print dut.sn
+
+            snr_total = dut.snr.split(',')[2]
+            dut.snr_total = snr_total
+
+            bin_code = dut.bin_codes.split(',')[0]
+            dut.bin_code = bin_code
+
             session.add(dut)
             session.commit()
 
