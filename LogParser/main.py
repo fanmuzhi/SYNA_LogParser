@@ -15,10 +15,22 @@ EXT = ".csv"
 
 
 class RegexPattern(object):
-    REGEX_DUT = re.compile(r"(?P<dut_log>Run.*?)(?=(Run\s\d+|$))")
-    REGEX_RUNLINE = re.compile(r"Run\s(?P<run_number>\d+),(?P<date>[^,]+),(?P<time>[^,]+),SN\s(?P<sn>\w{12})")
-    REGEX_BINCODE = re.compile(r"(?P<test_result>(Pass|Fail))\s,BinCode(,|\s)*(?P<bin_codes>(\d+,?)+)")
-    REGEX_SNRCODE = re.compile(r"SNR,+(?P<snr>([-+]?\d+\.?\d*,)+)")
+    # Labview
+    #REGEX_DUT = re.compile(r"(?P<dut_log>Run.*?)(?=(Run\s\d+|$))", re.DOTALL)
+    #REGEX_RUNLINE = re.compile(r"Run\s(?P<run_number>\d+),(?P<date>[^,]+),(?P<time>[^,]+),SN\s(?P<sn>\w{12})")
+    #REGEX_BINCODE = re.compile(r"(?P<test_result>(Pass|Fail))\s,BinCode(,|\s)*(?P<bin_codes>(\d+,?)+)")
+    ##REGEX_SNRCODE = re.compile(r"SNR,+(?P<snr>([-+]?\d+\.?\d*,)+)")
+    #REGEX_SNRCODE = re.compile(r"SNR[,|\r\n|\s]+(?P<snr>([-+]?\d+\.?\d*[,|\s])+)")
+    #REGEX_BS0 = re.compile(r"(?<=Boot\sSector\s0)(?P<dut_bs0>.*?)(?=(Pass|Fail))", re.DOTALL)
+
+    # C++
+    REGEX_DUT = re.compile(r"(?P<dut_log>Run.*?)(?=(Run\s\d+|$))", re.DOTALL)
+    REGEX_RUNLINE = re.compile(r"Run\s(?P<run_number>\d+),(?P<date>[^,]+),(?P<time>[^\r\n]+)(?P<sn>Sensor\sSerial\sNumber,\w{12})")
+    #REGEX_BINCODE = re.compile(r"(?P<test_result>(Pass|Fail))\s,BinCode(,|\s)*(?P<bin_codes>(\d+,?)+)")
+    REGEX_BINCODE = re.compile(r",Bin\sCodes:(,|\s)*(?P<bin_codes>(\d+,?)+)")
+    #REGEX_SNRCODE = re.compile(r"SNR,+(?P<snr>([-+]?\d+\.?\d*,)+)")
+    REGEX_SNRCODE = re.compile(r"SNR\sTest[^\r\n]+[,|\s]+(?P<snr>([-+]?\d+\.?\d*[,|\s])+)")
+    REGEX_BS0 = re.compile(r"(?<=Boot\sSector\s0)(?P<dut_bs0>.*?)(?=(Pass|Fail))", re.DOTALL)
 
     regex_single = [
         REGEX_RUNLINE,
@@ -40,12 +52,14 @@ def get_files(path, extension):
 def get_data(filepath):
     """ Get dut dictionary from the specified filepath
     """
-    #for csv in get_files(r"C:\logfiles\process", "csv"):
+    # for csv in get_files(r"C:\logfiles\process", "csv"):
     csv_log = open(filepath, 'rb')
     csv_log_strip = ""
     for line in csv_log.readlines():
-        csv_log_strip += line.strip()   # remove  \r\n or \r or \n
+        # csv_log_strip += line.strip()   # remove  \r\n or \r or \n
+        csv_log_strip += line
 
+    print csv_log_strip
     csv_log.close()
 
     dut_log_list = RegexPattern.REGEX_DUT.findall(csv_log_strip)
@@ -60,6 +74,14 @@ def get_data(filepath):
                 #    setattr(dut, k, v)
             else:
                 print "no found."
+
+        #r = RegexPattern.REGEX_BS0.search(dut_log)
+        #if r:
+        #    strBS0 = r.group()
+        #    print strBS0.strip()
+        #else:
+        #    print "BS0 not found."
+
         yield dut
 
 
@@ -75,10 +97,9 @@ def main():
             dut = DUT()
             for k, v in dut_dict.items():
                 setattr(dut, k, v)
-            print dut.sn
             snr_total = ''
             if dut.snr != None:
-                snr_total = dut.snr.split(',')[2]
+                snr_total = dut.snr.split(',')[-2]
 
             dut.snr_total = snr_total
             bin_code = ''

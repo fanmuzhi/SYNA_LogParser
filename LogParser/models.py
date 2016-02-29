@@ -12,7 +12,7 @@ class DUT(SQLBase):
     __tablename__ = "dut"
 
     id = Column(Integer, primary_key=True)
-    sn = Column(String(20), nullable=False)
+    sn = Column(String(20), nullable=True)
     test_result = Column(String(20))
     bin_code = Column(String(10))
     bin_codes = Column(String(20))
