@@ -9,7 +9,7 @@ import re
 
 __author__ = '@boqiling'
 
-FILEPATH = "C:/logfiles/process/"
+FILEPATH = "C:/logfiles/Huangpu/"
 DBURI = "sqlite:///logfile.db"
 EXT = ".csv"
 
@@ -24,18 +24,24 @@ class RegexPattern(object):
     #REGEX_BS0 = re.compile(r"(?<=Boot\sSector\s0)(?P<dut_bs0>.*?)(?=(Pass|Fail))", re.DOTALL)
 
     # C++
-    REGEX_DUT = re.compile(r"(?P<dut_log>Run.*?)(?=(Run\s\d+|$))", re.DOTALL)
-    REGEX_RUNLINE = re.compile(r"Run\s(?P<run_number>\d+),(?P<date>[^,]+),(?P<time>[^\r\n]+)(?P<sn>Sensor\sSerial\sNumber,\w{12})")
+    #REGEX_DUT = re.compile(r"(?P<dut_log>Run.*?)(?=(Run\s\d+|$))", re.DOTALL)
+    REGEX_TIME = re.compile(r"Test\sTime,(?P<time>[^\r\n]+)")
+    REGEX_SN = re.compile(r"Sensor\sSerial\sNumber,(?P<sn>\w{12})")
     #REGEX_BINCODE = re.compile(r"(?P<test_result>(Pass|Fail))\s,BinCode(,|\s)*(?P<bin_codes>(\d+,?)+)")
-    REGEX_BINCODE = re.compile(r",Bin\sCodes:(,|\s)*(?P<bin_codes>(\d+,?)+)")
+    REGEX_BINCODE = re.compile(r"Bin\sCodes(,|\s)*(?P<bin_codes>(\d+,?)+)")
     #REGEX_SNRCODE = re.compile(r"SNR,+(?P<snr>([-+]?\d+\.?\d*,)+)")
     REGEX_SNRCODE = re.compile(r"SNR\sTest[^\r\n]+[,|\s]+(?P<snr>([-+]?\d+\.?\d*[,|\s])+)")
-    REGEX_BS0 = re.compile(r"(?<=Boot\sSector\s0)(?P<dut_bs0>.*?)(?=(Pass|Fail))", re.DOTALL)
+    REGEX_WOF = re.compile(r"WOF[^\r\n]+[,|\s]+(?P<wof>([-+]?\d+\.?\d*[,|\s])+)")
+    REGEX_SCMWOF = re.compile(r"SCM[^\r\n]+[,|\s]+(?P<scmwof>([-+]?\d+\.?\d*[,|\s])+)")
+    #REGEX_BS0 = re.compile(r"(?<=Boot\sSector\s0)(?P<dut_bs0>.*?)(?=(Pass|Fail))", re.DOTALL)
 
     regex_single = [
-        REGEX_RUNLINE,
+        REGEX_TIME,
+        REGEX_SN,
         REGEX_BINCODE,
         REGEX_SNRCODE,
+        REGEX_WOF,
+        REGEX_SCMWOF,
     ]
 
 
@@ -59,21 +65,22 @@ def get_data(filepath):
         # csv_log_strip += line.strip()   # remove  \r\n or \r or \n
         csv_log_strip += line
 
-    print csv_log_strip
+    #print csv_log_strip
     csv_log.close()
 
-    dut_log_list = RegexPattern.REGEX_DUT.findall(csv_log_strip)
-    for dut_log, x in dut_log_list:
-        dut = {}
-        for pattern in RegexPattern.regex_single:
-            r = pattern.search(dut_log)
-            if r:
-                dut.update(r.groupdict())
-                #for k, v in r.groupdict():
-                #    print k, v
-                #    setattr(dut, k, v)
-            else:
-                print "no found."
+    #dut_log_list = RegexPattern.REGEX_DUT.findall(csv_log_strip)
+    #for dut_log, x in dut_log_list:
+    dut = {}
+    for pattern in RegexPattern.regex_single:
+        r = pattern.search(csv_log_strip)
+        if r:
+            dut.update(r.groupdict())
+            #print r.groupdict();
+            #for k, v in r.groupdict():
+            #    print k, v
+            #    setattr(dut, k, v)
+        else:
+            print "no found."
 
         #r = RegexPattern.REGEX_BS0.search(dut_log)
         #if r:
@@ -82,7 +89,8 @@ def get_data(filepath):
         #else:
         #    print "BS0 not found."
 
-        yield dut
+        #yield dut
+    return dut
 
 
 def main():
@@ -92,23 +100,32 @@ def main():
 
     for csv in get_files(FILEPATH, EXT):
         print csv
-        for dut_dict in get_data(csv):
-            print dut_dict
-            dut = DUT()
-            for k, v in dut_dict.items():
-                setattr(dut, k, v)
-            snr_total = ''
-            if dut.snr != None:
-                snr_total = dut.snr.split(',')[-2]
+        #for dut_dict in get_data(csv):
+        dut_dict = get_data(csv)
+        print dut_dict
+        dut = DUT()
+        for k, v in dut_dict.items():
+            setattr(dut, k, v)
+        snr_total = ''
+        if dut.snr != None:
+            snr_total = dut.snr.split(',')[-2]
 
-            dut.snr_total = snr_total
-            bin_code = ''
-            if dut.bin_codes != None:
-                bin_code = dut.bin_codes.split(',')[0]
-            dut.bin_code = bin_code
+        dut.snr_total = snr_total
+        bin_code = ''
+        if dut.bin_codes != None:
+            bin_code = dut.bin_codes.split(',')[0]
+        dut.bin_code = bin_code
 
-            session.add(dut)
-            session.commit()
+        if dut.wof != None:
+            dut.wof = dut.wof.strip()
+            dut.wof_nf, dut.wof_wf, gain, dut.wof_gap = dut.wof.split(',')
+
+        if dut.scmwof != None:
+            dut.scmwof = dut.scmwof.strip()
+            dut.scmwof_nf, dut.scmwof_wf, gain, dut.scmwof_gap = dut.scmwof.split(',')
+
+        session.add(dut)
+        session.commit()
 
     session.close()
 
