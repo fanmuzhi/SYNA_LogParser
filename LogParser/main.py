@@ -114,6 +114,10 @@ def main():
         bin_code = ''
         if dut.bin_codes != None:
             bin_code = dut.bin_codes.split(',')[0]
+            if bin_code != '1':
+                dut.test_result = 'Fail'
+            else:
+                dut.test_result = 'Pass'
         dut.bin_code = bin_code
 
         if dut.wof != None:
@@ -123,6 +127,7 @@ def main():
         if dut.scmwof != None:
             dut.scmwof = dut.scmwof.strip()
             dut.scmwof_nf, dut.scmwof_wf, gain, dut.scmwof_gap = dut.scmwof.split(',')
+
 
         session.add(dut)
         session.commit()
