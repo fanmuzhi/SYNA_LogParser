@@ -25,8 +25,8 @@ class RegexPattern(object):
 
     # C++
     #REGEX_DUT = re.compile(r"(?P<dut_log>Run.*?)(?=(Run\s\d+|$))", re.DOTALL)
-    REGEX_TIME = re.compile(r"Test\sTime,(?P<time>[^\r\n]+)")
-    REGEX_SN = re.compile(r"Sensor\sSerial\sNumber,(?P<sn>\w{12})")
+    REGEX_TIME = re.compile(r"(Run\s|Test\sTime),(?P<time>[^\r\n]+)")
+    REGEX_SN = re.compile(r"Sensor\sSerial\sNumber\s?,(?P<sn>\w{12})")
     #REGEX_BINCODE = re.compile(r"(?P<test_result>(Pass|Fail))\s,BinCode(,|\s)*(?P<bin_codes>(\d+,?)+)")
     REGEX_BINCODE = re.compile(r"Bin\sCodes(,|\s)*(?P<bin_codes>(\d+,?)+)")
     #REGEX_SNRCODE = re.compile(r"SNR,+(?P<snr>([-+]?\d+\.?\d*,)+)")
