@@ -31,8 +31,10 @@ class RegexPattern(object):
     REGEX_BINCODE = re.compile(r"Bin\sCodes(,|\s)*(?P<bin_codes>(\d+,?)+)")
     #REGEX_SNRCODE = re.compile(r"SNR,+(?P<snr>([-+]?\d+\.?\d*,)+)")
     REGEX_SNRCODE = re.compile(r"SNR\sTest[^\r\n]+[,|\s]+(?P<snr>([-+]?\d+\.?\d*[,|\s])+)")
-    REGEX_WOF = re.compile(r"WOF[^\r\n]+[,|\s]+(?P<wof>([-+]?\d+\.?\d*[,|\s])+)")
-    REGEX_SCMWOF = re.compile(r"SCM[^\r\n]+[,|\s]+(?P<scmwof>([-+]?\d+\.?\d*[,|\s])+)")
+    REGEX_WOF_BOT = re.compile(r"WOF\sZone\s0,+[^\r\n]+[,|\s]+(?P<wof_bot>([-+]?\d+\.?\d*[,|\s])+)")
+    REGEX_WOF_TOP = re.compile(r"WOF\sZone\s1,+[^\r\n]+[,|\s]+(?P<wof_top>([-+]?\d+\.?\d*[,|\s])+)")
+    REGEX_SCMWOF_BOT = re.compile(r"SCM\sBottom\s+[^\r\n]+[,|\s]+(?P<scmwof_bot>([-+]?\d+\.?\d*[,|\s])+)")
+    REGEX_SCMWOF_TOP = re.compile(r"SCM\sTop\s+[^\r\n]+[,|\s]+(?P<scmwof_top>([-+]?\d+\.?\d*[,|\s])+)")
     #REGEX_BS0 = re.compile(r"(?<=Boot\sSector\s0)(?P<dut_bs0>.*?)(?=(Pass|Fail))", re.DOTALL)
 
     regex_single = [
@@ -40,8 +42,10 @@ class RegexPattern(object):
         REGEX_SN,
         REGEX_BINCODE,
         REGEX_SNRCODE,
-        REGEX_WOF,
-        REGEX_SCMWOF,
+        REGEX_WOF_BOT,
+        REGEX_WOF_TOP,
+        REGEX_SCMWOF_BOT,
+        REGEX_SCMWOF_TOP,
     ]
 
 
@@ -120,13 +124,21 @@ def main():
                 dut.test_result = 'Pass'
         dut.bin_code = bin_code
 
-        if dut.wof != None:
-            dut.wof = dut.wof.strip()
-            dut.wof_nf, dut.wof_wf, gain, dut.wof_gap = dut.wof.split(',')
+        if dut.wof_bot != None:
+            dut.wof_bot = dut.wof_bot.strip()
+            dut.wof_bot_nf, dut.wof_bot_wf, gain, dut.wof_bot_gap = dut.wof_bot.split(',')
 
-        if dut.scmwof != None:
-            dut.scmwof = dut.scmwof.strip()
-            dut.scmwof_nf, dut.scmwof_wf, gain, dut.scmwof_gap = dut.scmwof.split(',')
+        if dut.wof_top != None:
+            dut.wof_top = dut.wof_top.strip()
+            dut.wof_top_nf, dut.wof_top_wf, gain, dut.wof_top_gap = dut.wof_top.split(',')
+
+        if dut.scmwof_bot != None:
+            dut.scmwof_bot = dut.scmwof_bot.strip()
+            dut.scmwof_bot_nf, dut.scmwof_bot_wf, gain, dut.scmwof_bot_gap = dut.scmwof_bot.split(',')
+
+        if dut.scmwof_top != None:
+            dut.scmwof_top = dut.scmwof_top.strip()
+            dut.scmwof_top_nf, dut.scmwof_top_wf, gain, dut.scmwof_top_gap = dut.scmwof_top.split(',')
 
 
         session.add(dut)
