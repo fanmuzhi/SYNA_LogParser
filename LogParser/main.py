@@ -125,20 +125,20 @@ def main():
         dut.bin_code = bin_code
 
         if dut.wof_bot != None:
-            dut.wof_bot = dut.wof_bot.strip()
-            dut.wof_bot_nf, dut.wof_bot_wf, gain, dut.wof_bot_gap = dut.wof_bot.split(',')
+            # dut.wof_bot = dut.wof_bot.strip()
+            dut.wof_bot_nf, dut.wof_bot_wf, dut.wof_bot_gain, dut.wof_bot_gap = dut.wof_bot.split(',')
 
         if dut.wof_top != None:
-            dut.wof_top = dut.wof_top.strip()
-            dut.wof_top_nf, dut.wof_top_wf, gain, dut.wof_top_gap = dut.wof_top.split(',')
+            # dut.wof_top = dut.wof_top.strip()
+            dut.wof_top_nf, dut.wof_top_wf, dut.wof_top_gain, dut.wof_top_gap = dut.wof_top.split(',')
 
         if dut.scmwof_bot != None:
-            dut.scmwof_bot = dut.scmwof_bot.strip()
-            dut.scmwof_bot_nf, dut.scmwof_bot_wf, gain, dut.scmwof_bot_gap = dut.scmwof_bot.split(',')
+            # dut.scmwof_bot = dut.scmwof_bot.strip()
+            dut.scmwof_bot_nf, dut.scmwof_bot_wf, dut.scmwof_bot_gain, dut.scmwof_bot_gap = dut.scmwof_bot.split(',')
 
         if dut.scmwof_top != None:
-            dut.scmwof_top = dut.scmwof_top.strip()
-            dut.scmwof_top_nf, dut.scmwof_top_wf, gain, dut.scmwof_top_gap = dut.scmwof_top.split(',')
+            # dut.scmwof_top = dut.scmwof_top.strip()
+            dut.scmwof_top_nf, dut.scmwof_top_wf, dut.scmwof_top_gain, dut.scmwof_top_gap = dut.scmwof_top.split(',')
 
 
         session.add(dut)
