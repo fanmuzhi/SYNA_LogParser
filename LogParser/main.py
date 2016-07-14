@@ -130,32 +130,30 @@ def main():
                 dut.test_result = 'Pass'
         dut.bin_code = bin_code
 
-        # if dut.wof_bot != None:
-        #     # dut.wof_bot = dut.wof_bot.strip()
-        #     dut.wof_bot_nf, dut.wof_bot_wf, dut.wof_bot_gain, dut.wof_bot_gap = dut.wof_bot.split(',')
-        #
-        # if dut.wof_top != None:
-        #     # dut.wof_top = dut.wof_top.strip()
-        #     dut.wof_top_nf, dut.wof_top_wf, dut.wof_top_gain, dut.wof_top_gap = dut.wof_top.split(',')
-        if dut.wof_z0_fd != None:
+        # if dut.wof_z0_fd != None:
+        if hasattr(dut, 'wof_z0_fd'):
             dut.wof_z0_fd = dut.wof_z0_fd.strip()
+            dut.wof_z0_fd_nf, dut.wof_z0_fd_wf, dut.wof_z0_fd_gain, dut.wof_z0_fd_delta = dut.wof_z0_fd.split(',')
 
-        if dut.wof_z0_fu != None:
-            dut.wof_z0_fu = dut.wof_z0_fu.strip()
-
-        if dut.wof_z1_fd != None:
+        if hasattr(dut, 'wof_z1_fd'):
             dut.wof_z1_fd = dut.wof_z1_fd.strip()
+            dut.wof_z1_fd_nf, dut.wof_z1_fd_wf, dut.wof_z1_fd_gain, dut.wof_z1_fd_delta = dut.wof_z1_fd.split(',')
 
-        if dut.wof_z1_fu != None:
+        if hasattr(dut, 'wof_z0_fu'):
+            dut.wof_z0_fu = dut.wof_z0_fu.strip()
+            dut.wof_z0_fu_nf, dut.wof_z0_fu_wf, dut.wof_z0_fu_gain, dut.wof_z0_fu_delta = dut.wof_z0_fu.split(',')
+
+        if hasattr(dut, 'wof_z1_fu'):
             dut.wof_z1_fu = dut.wof_z1_fu.strip()
+            dut.wof_z1_fu_nf, dut.wof_z1_fu_wf, dut.wof_z1_fu_gain, dut.wof_z1_fu_delta = dut.wof_z1_fu.split(',')
 
-        if dut.scmwof_bot != None:
+        if hasattr(dut, 'scmwof_bot'):
             dut.scmwof_bot = dut.scmwof_bot.strip()
-            # dut.scmwof_bot_nf, dut.scmwof_bot_wf, dut.scmwof_bot_gain, dut.scmwof_bot_gap = dut.scmwof_bot.split(',')
+            dut.scmwof_bot_nf, dut.scmwof_bot_wf, dut.scmwof_bot_gain, dut.scmwof_bot_delta = dut.scmwof_bot.split(',')
 
-        if dut.scmwof_top != None:
+        if hasattr(dut, 'scmwof_top'):
             dut.scmwof_top = dut.scmwof_top.strip()
-            # dut.scmwof_top_nf, dut.scmwof_top_wf, dut.scmwof_top_gain, dut.scmwof_top_gap = dut.scmwof_top.split(',')
+            dut.scmwof_top_nf, dut.scmwof_top_wf, dut.scmwof_top_gain, dut.scmwof_top_delta = dut.scmwof_top.split(',')
 
 
         session.add(dut)
