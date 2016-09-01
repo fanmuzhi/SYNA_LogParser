@@ -19,6 +19,8 @@ class DUT(SQLBase):
     #date = Column(String(20))
     time = Column(String(20))
     # snr = Column(String(20))
+    signal = Column(Float(10))
+    noise = Column(Float(10))
     snr_overall = Column(Float(10))
     wof_z0_fd_nf = Column(Integer(5))
     wof_z0_fd_wf = Column(Integer(5))

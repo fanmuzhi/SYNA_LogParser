@@ -116,21 +116,18 @@ def main():
         dut = DUT()
         for k, v in dut_dict.items():
             setattr(dut, k, v)
-        snr_overall = ''
-        if dut.snr != None:
-            snr_overall = dut.snr.split(',')[-2]
 
-        dut.snr_overall = snr_overall
-        bin_code = ''
-        if dut.bin_codes != None:
-            bin_code = dut.bin_codes.split(',')[0]
-            if bin_code != '1':
-                dut.test_result = 'Fail'
-            else:
-                dut.test_result = 'Pass'
-        dut.bin_code = bin_code
+        if hasattr(dut, 'snr'):
+            dut.signal, dut.noise, dut.snr_overall = dut.snr.split(',')[-4], dut.snr.split(',')[-3], dut.snr.split(',')[-2]
 
-        # if dut.wof_z0_fd != None:
+        if hasattr(dut, 'bin_codes'):
+            if dut.bin_codes is not None:
+                if dut.bin_codes != '1':
+                    dut.test_result = 'Fail'
+                else:
+                    dut.test_result = 'Pass'
+                dut.bin_code = dut.bin_codes.split(',')[0]
+
         if hasattr(dut, 'wof_z0_fd'):
             dut.wof_z0_fd = dut.wof_z0_fd.strip()
             dut.wof_z0_fd_nf, dut.wof_z0_fd_wf, dut.wof_z0_fd_gain, dut.wof_z0_fd_delta = dut.wof_z0_fd.split(',')
