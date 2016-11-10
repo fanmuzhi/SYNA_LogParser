@@ -37,8 +37,8 @@ class RegexPattern(object):
     REGEX_WOF_Z0_FU = re.compile(r"WOF\sZone0\s+FingerUp,+[^\r\n]+[,|\s]+(?P<wof_z0_fu>([-+]?\d+\.?\d*[,|\s])+)")
     REGEX_WOF_Z1_FD = re.compile(r"WOF\sZone1\s+FingerDown,+[^\r\n]+[,|\s]+(?P<wof_z1_fd>([-+]?\d+\.?\d*[,|\s])+)")
     REGEX_WOF_Z1_FU = re.compile(r"WOF\sZone1\s+FingerUp,+[^\r\n]+[,|\s]+(?P<wof_z1_fu>([-+]?\d+\.?\d*[,|\s])+)")
-    REGEX_SCMWOF_BOT = re.compile(r"SCM\sBottom\s+[^\r\n]+[,|\s]+(?P<scmwof_bot>([-+]?\d+\.?\d*[,|\s])+)")
-    REGEX_SCMWOF_TOP = re.compile(r"SCM\sTop\s+[^\r\n]+[,|\s]+(?P<scmwof_top>([-+]?\d+\.?\d*[,|\s])+)")
+    REGEX_SCMWOF_BOT = re.compile(r"SCM\sZone0\sWakeOnFinger\sTest+[^\r\n]+[,|\s]+(?P<scmwof_bot>([-+]?\d+\.?\d*[,|\s])+)")
+    REGEX_SCMWOF_TOP = re.compile(r"SCM\sZone1\sWakeOnFinger\sTest+[^\r\n]+[,|\s]+(?P<scmwof_top>([-+]?\d+\.?\d*[,|\s])+)")
     #REGEX_BS0 = re.compile(r"(?<=Boot\sSector\s0)(?P<dut_bs0>.*?)(?=(Pass|Fail))", re.DOTALL)
 
     regex_single = [
